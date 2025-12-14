@@ -59,8 +59,8 @@ class ProductionController extends Controller
             'batch_code' => 'sometimes|string|max:100',
             'quantity'   => 'sometimes|integer|min:1',
             'failed_qty' => 'sometimes|integer|min:0',
-            'start_date' => 'sometimes|date',
-            'end_date'   => 'nullable|date',
+            'production_date' => 'sometimes|date',
+            'finished_date'   => 'nullable|date',
             'notes'      => 'nullable|string',
             'status'     => 'sometimes|string|max:100'
         ]);
