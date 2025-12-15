@@ -4,15 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Production;
 use Illuminate\Http\Request;
+use App\Http\Resources\ProductionResource;
 
 class ProductionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        return Production::query()->with('product')->orderBy('id', 'desc')->get();
+        $query = Production::query()->with('product')->orderBy('id', 'desc');
+
+        $perPage = $request->get('per_page', 10);
+        $productions = $query->paginate($perPage);
+
+        return response()->json([
+            'data' => ProductionResource::collection($productions),
+            'meta' => [
+                'current_page' => $productions->currentPage(),
+                'last_page' => $productions->lastPage(),
+                'per_page' => $productions->perPage(),
+                'total' => $productions->total(),
+            ],
+        ]);
     }
 
     /**
@@ -27,7 +42,8 @@ class ProductionController extends Controller
             'finished_date'     => 'nullable|date|after_or_equal:start_date',
             'quantity'     => 'required|integer|min:1',
             'failed_qty'   => 'nullable|integer|min:0',
-            'notes'        => 'nullable|string'
+            'notes'        => 'nullable|string',
+            'status'       => 'nullable|string'
         ]);
 
         $data['failed_qty'] = $data['failed_qty'] ?? 0;

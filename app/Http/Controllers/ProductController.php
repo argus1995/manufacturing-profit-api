@@ -10,9 +10,14 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::all();
+        $query = Product::query();
+
+        $perPage = $request->get('per_page', 10);
+        $products = $query->paginate($perPage);
+
+        return response()->json($products);
     }
 
     /**

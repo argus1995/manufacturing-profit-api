@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SaleResource;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use Illuminate\Http\Request;
@@ -12,9 +13,13 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sales = Sale::with('items')->latest()->get();
+        $query = Sale::with('items.product')->latest();
+
+        $perPage = $request->get('per_page', 10);
+        $sales = $query->paginate($perPage);
+
         return response()->json($sales);
     }
 
@@ -74,7 +79,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        return $sale->load('items');
+        return new SaleResource($sale->load('items.product'));
     }
 
     /**
