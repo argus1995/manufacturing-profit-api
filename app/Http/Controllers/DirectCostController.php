@@ -10,9 +10,14 @@ class DirectCostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return DirectCost::with('production')->latest()->get();
+        $query = DirectCost::with('production')->latest();
+
+        $perPage = $request->get('per_page', 10);
+        $direcCosts = $query->paginate($perPage);
+
+        return response()->json($direcCosts);
     }
 
     /**

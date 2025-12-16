@@ -10,9 +10,14 @@ class OperationalCostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return OperationalCost::latest()->get();
+        $query = OperationalCost::latest();
+
+        $perPage = $request->get('per_page', 10);
+        $operationalCosts = $query->paginate($perPage);
+
+        return response()->json($operationalCosts);
     }
 
     /**
