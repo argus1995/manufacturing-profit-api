@@ -13,4 +13,8 @@ class OperationalCost extends Model
         'category',
         'note',
     ];
+
+    protected $casts = [
+        'amount' => 'float',
+    ];
 }

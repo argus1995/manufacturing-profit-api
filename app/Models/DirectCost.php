@@ -14,6 +14,10 @@ class DirectCost extends Model
         'note',
     ];
 
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
     public function production()
     {
         return $this->belongsTo(Production::class);

@@ -36,4 +36,9 @@ class Production extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function directCosts()
+    {
+        return $this->hasMany(DirectCost::class);
+    }
 }
